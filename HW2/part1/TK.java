@@ -34,6 +34,12 @@ public class TK {
     public static final TK TIMES  = new TK("TK.TIMES");    // *
     public static final TK DIVIDE = new TK("TK.DIVIDE");   // /
 
+    public static final TK ENDDO   = new TK("TK.ENDDO");   // >
+    public static final TK ASSIGN = new TK("TK.ASSIGN");   // =
+    public static final TK TILDE = new TK("TK.TILDE");   // =
+
+
+
     public static final TK ID     = new TK("TK.ID");	   // identifier
 
     public static final TK NUM    = new TK("TK.NUM");	   // number
