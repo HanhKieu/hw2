@@ -26,32 +26,27 @@ public class Parser {
     private void block(){
 	declaration_list();
 	statement_list();
-    }
+    }//COMPLETED
 
     private void declaration_list() {
 	// below checks whether tok is in first set of declaration.
 	// here, that's easy since there's only one token kind in the set.
 	// in other places, though, there might be more.
 	// so, you might want to write a general function to handle that.
-	while( is(TK.DECLARE) ) {
-	    declaration();
-	}
-    }
+		while( is(TK.DECLARE) ) {
+		    declaration();
+		}
+    }//completed
 
     private void declaration() {
-	mustbe(TK.DECLARE);
-	mustbe(TK.ID);
-	while( is(TK.COMMA) ) {
-	    scan();
-	    mustbe(TK.ID);
-	}
-    }
-
-    private void statement_list() {
-    	while( is(TK.TILDE) || is(TK.ID) || is(TK.PRINT) || is(TK.DO) || is(TK.IF)){
-    		statement();
-    	}
-    }
+		mustbe(TK.DECLARE);
+		mustbe(TK.ID);
+		while( is(TK.COMMA) ) {
+		    scan();
+		    mustbe(TK.ID);
+		}
+    }//COMPLETED
+    
     private void statement(){
     	if(is(TK.TILDE) || is(TK.ID))
     		assignment();
@@ -59,6 +54,11 @@ public class Parser {
     		print();
     	else if(is(TK.IF))
     		iff();
+    }
+    private void statement_list() {
+    	while( is(TK.TILDE) || is(TK.ID) || is(TK.PRINT) || is(TK.DO) || is(TK.IF)){
+    		statement();
+    	}
     }
 
     private void print(){
@@ -73,7 +73,8 @@ public class Parser {
     private void ref_id(){
     	if(is(TK.TILDE)){
     		mustbe(TK.TILDE);
-    		mustbe(TK.NUM);
+    		if(is(TK.NUM))
+    			mustbe(TK.NUM);
     	}
     	mustbe(TK.ID);
     }
@@ -90,13 +91,13 @@ public class Parser {
     		block();
     	}
     	mustbe(TK.ENDIF);
-    }
+    }//COMPLETED
 
     private void guarded_command(){
     	expr();
     	mustbe(TK.THEN);
     	block();
-    } 
+    }//COMPLETED
 
     private void expr(){
     	term();
@@ -105,12 +106,15 @@ public class Parser {
 	    	term();
 		}
 
-    }
+    }//COMPLETED
 
     private void term(){
     	factor();
-
-    }
+    	while(is(TK.TIMES) || is(TK.DIVIDE)){
+    		scan();
+    		factor();
+    	}
+    }//COMPLETED
 
     private void factor(){
     	if(is(TK.LPAREN)){
