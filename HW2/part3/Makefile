@@ -2,7 +2,7 @@ SHELL  = /bin/sh
 
 # pretty minimal makefile
 e2c:
-	javac *.java
+	javac *.java 
 
 # invoke via "make clean".
 # WARNING: make sure you know what this is going to do before you invoke it!!!

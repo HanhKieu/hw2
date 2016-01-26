@@ -1,4 +1,6 @@
 /* *** This file is given as part of the programming assignment. *** */
+import java.util.List;
+import java.util.ArrayList;
 
 public class Parser {
 
@@ -6,6 +8,13 @@ public class Parser {
     // tok is global to all these parsing methods;
     // scan just calls the scanner's scan method and saves the result in tok.
     private Token tok; // the current token
+    private SymbolTable myTable = new SymbolTable();
+    List<String> scope = new ArrayList<String>();
+    int counter = 0;
+
+
+    //myTable.myStack.push();
+    
     private void scan() {
 	tok = scanner.scan();
     }
@@ -24,8 +33,15 @@ public class Parser {
     }
 
     private void block(){
-	declaration_list();
-	statement_list();
+        if(counter != 0)
+            myTable.myStack.push(scope);
+        scope.clear();
+        counter++;
+
+    	declaration_list();
+    	statement_list();
+        if(!myTable.myStack.empty())
+            myTable.myStack.pop();
     }//COMPLETED
 
     private void declaration_list() {
