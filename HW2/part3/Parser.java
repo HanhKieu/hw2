@@ -35,20 +35,21 @@ public class Parser {
     }
 
     private void block(){
+        System.out.println("(block)");
         if(counter != 0)
             myTable.myStack.push(scope);
-
         scope.clear();
         counter++;
 
     	declaration_list();
     	statement_list();
-
-        if(!myTable.myStack.empty())
-            myTable.myStack.pop();
+        if(!myTable.myStack.empty()){
+            System.out.println(myTable.myStack.pop() + "boobs");
+        }
     }//COMPLETED
 
     private void declaration_list() {
+        System.out.println("(declaration_list)");
 	// below checks whether tok is in first set of declaration.
 	// here, that's easy since there's only one token kind in the set.
 	// in other places, though, there might be more.
@@ -59,6 +60,7 @@ public class Parser {
     }//completed
 
     private void declaration() {
+        System.out.println("(declaration)");
 		mustbe(TK.DECLARE);
         if(is(TK.ID)){
             if(notDeclared(tok.string))
@@ -83,6 +85,7 @@ public class Parser {
     }//COMPLETED
 
     private void statement(){
+        System.out.println("(statement)");
     	if(is(TK.TILDE) || is(TK.ID))
     		assignment();
     	else if(is(TK.PRINT))
@@ -95,23 +98,27 @@ public class Parser {
     }//COMPLETED
 
     private void statement_list() {
+        System.out.println("(statement_list)");
     	while( is(TK.TILDE) || is(TK.ID) || is(TK.PRINT) || is(TK.DO) || is(TK.IF)){
     		statement();
     	}
     }//COMPLETED
 
     private void print(){
+        System.out.println("(print)");
     	mustbe(TK.PRINT);
     	expr();
     }//COMPLETED
 
     private void assignment(){
+        System.out.println("(assignment)");
     	ref_id();
     	mustbe(TK.ASSIGN);
     	expr();
     }//COMPLETED
 
     private void ref_id(){
+        System.out.println("(ref_id)");
     	if(is(TK.TILDE)){
     		mustbe(TK.TILDE);
     		if(is(TK.NUM))
@@ -124,12 +131,14 @@ public class Parser {
     }//COMPLETED
 
     private void doo(){
+        System.out.println("(doo)");
     	mustbe(TK.DO);
     	guarded_command();
     	mustbe(TK.ENDDO);
     }//COMPLETED
 
     private void iff(){
+        System.out.println("(iff)");
     	mustbe(TK.IF);
     	guarded_command();
     	while(is(TK.ELSEIF)) {
@@ -144,12 +153,14 @@ public class Parser {
     }//COMPLETED
 
     private void guarded_command(){
+        System.out.println("(guarded_command)");
     	expr();
     	mustbe(TK.THEN);
     	block();
     }//COMPLETED
 
     private void expr(){
+        System.out.println("(expr)");
     	term();
     	while( is(TK.PLUS) || is(TK.MINUS) ) {
 	    	scan();
@@ -159,6 +170,7 @@ public class Parser {
     }//COMPLETED
 
     private void term(){
+        System.out.println("(term)");
     	factor();
     	while(is(TK.TIMES) || is(TK.DIVIDE)){
     		scan();
@@ -167,6 +179,7 @@ public class Parser {
     }//COMPLETED
 
     private void factor(){
+        System.out.println("(factor)");
     	if(is(TK.LPAREN)){
     		mustbe(TK.LPAREN);
     		expr();
