@@ -46,30 +46,36 @@ public class Parser {
 		    mustbe(TK.ID);
 		}
     }//COMPLETED
-    
+
     private void statement(){
     	if(is(TK.TILDE) || is(TK.ID))
     		assignment();
     	else if(is(TK.PRINT))
     		print();
+    	else if(is(TK.DO)){
+    		doo();
+    	}
     	else if(is(TK.IF))
     		iff();
-    }
+    }//COMPLETED
+
     private void statement_list() {
     	while( is(TK.TILDE) || is(TK.ID) || is(TK.PRINT) || is(TK.DO) || is(TK.IF)){
     		statement();
     	}
-    }
+    }//COMPLETED
 
     private void print(){
     	mustbe(TK.PRINT);
     	expr();
-    }
+    }//COMPLETED
+
     private void assignment(){
     	ref_id();
     	mustbe(TK.ASSIGN);
     	expr();
-    }
+    }//COMPLETED
+
     private void ref_id(){
     	if(is(TK.TILDE)){
     		mustbe(TK.TILDE);
@@ -77,13 +83,19 @@ public class Parser {
     			mustbe(TK.NUM);
     	}
     	mustbe(TK.ID);
-    }
+    }//COMPLETED
+
+    private void doo(){
+    	mustbe(TK.DO);
+    	guarded_command();
+    	mustbe(TK.ENDDO);
+    }//COMPLETED
 
     private void iff(){
     	mustbe(TK.IF);
     	guarded_command();
-    	if(is(TK.ELSEIF)){
-    		mustbe(TK.ELSEIF);
+    	while(is(TK.ELSEIF)) {
+    		scan();
     		guarded_command();
     	}
     	if(is(TK.ELSE)){
