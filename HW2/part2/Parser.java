@@ -100,15 +100,33 @@ public class Parser {
 
     private void expr(){
     	term();
+    	while( is(TK.PLUS) || is(TK.MINUS) ) {
+	    	scan();
+	    	term();
+		}
+
     }
 
     private void term(){
     	factor();
+
     }
 
     private void factor(){
-    	mustbe(TK.NUM);
-    }
+    	if(is(TK.LPAREN)){
+    		mustbe(TK.LPAREN);
+    		expr();
+    		mustbe(TK.RPAREN);
+    	}
+    	else if(is(TK.TILDE) || is(TK.ID)){
+    		ref_id();
+    	}
+    	else if(is(TK.NUM))
+    	{
+    		mustbe(TK.NUM);
+    	}
+
+    }//COMPLETED
 
     // is current token what we want?
     private boolean is(TK tk) {
