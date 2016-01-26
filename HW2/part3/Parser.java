@@ -20,10 +20,12 @@ public class Parser {
     }
 
     private Scan scanner;
+
     Parser(Scan scanner) {
     	this.scanner = scanner;
     	scan();
     	program();
+
     	if( tok.kind != TK.EOF )
     	    parse_error("junk after logical end of program");
     }
@@ -35,11 +37,13 @@ public class Parser {
     private void block(){
         if(counter != 0)
             myTable.myStack.push(scope);
+
         scope.clear();
         counter++;
 
     	declaration_list();
     	statement_list();
+
         if(!myTable.myStack.empty())
             myTable.myStack.pop();
     }//COMPLETED
@@ -56,14 +60,24 @@ public class Parser {
 
     private void declaration() {
 		mustbe(TK.DECLARE);
-        if(is(TK.ID))
-            scope.add(tok.string);
+        if(is(TK.ID)){
+            if(notDeclared(tok.string))
+                scope.add(tok.string);
+            else{
+                redeclaration_error(tok.string,tok.lineNumber);
+            }
+        }
 		mustbe(TK.ID);
 
 		while( is(TK.COMMA) ) {
 		    scan();
-            if(is(TK.ID))
-                scope.add(tok.string);
+            if(is(TK.ID)){
+                if(notDeclared(tok.string))
+                    scope.add(tok.string);
+                else{
+                    redeclaration_error(tok.string,tok.lineNumber);
+                }
+            }
 		    mustbe(TK.ID);
 		}
     }//COMPLETED
@@ -103,6 +117,7 @@ public class Parser {
     		if(is(TK.NUM))
     			mustbe(TK.NUM);
     	}
+
         if(notDeclared(tok.string))
             declaration_error(tok.string,tok.lineNumber);
     	mustbe(TK.ID);
@@ -181,7 +196,10 @@ public class Parser {
 	}
 	scan();
     }
-
+    /*
+    //If the id has not been declared yet return true
+    //else return false
+    */
     private boolean notDeclared(String string){
         if(!scope.contains(string) && (myTable.myStack.search(string) == -1))
             return true;
@@ -190,8 +208,23 @@ public class Parser {
         }
     }
 
+    /*
+    //Takes two arguments string and linenumber
+    //string is the id that has not been declared yet, but is being used
+    //linenumber is the line in which it occured
+    */
     private void declaration_error(String string, int lineNumber){
         System.err.println(string + " is an undeclared variable on line " + lineNumber);
+        System.exit(1);
+    }
+
+    /*
+    //Takes two arguments string and linenumber
+    //string is the id that is being redeclared
+    //linenumber is the line in which it occured
+    */
+    private void redeclaration_error(String string, int lineNumber){
+        System.err.println(string + " is a redeclared variable on line " + lineNumber);
         System.exit(1);
     }
 
