@@ -48,6 +48,40 @@ public class Parser {
     }
 
     private void statement_list() {
+    	while( is(TK.TILDE) || is(TK.ID) || is(TK.PRINT) || is(TK.DO) || is(TK.IF)){
+    		statement();
+    	}
+    }
+    private void statement(){
+    	if(is(TK.TILDE) || is(TK.ID))
+    		assignment();
+    	else if(is(TK.PRINT))
+    		print();
+    }
+
+    private void print(){
+    	mustbe(TK.PRINT);
+    	expr();
+    }
+    private void assignment(){
+    	ref_id();
+    	mustbe(TK.ASSIGN);
+    	expr();
+    }
+    private void ref_id(){
+
+    	mustbe(TK.ID);
+    }
+    private void expr(){
+    	term();
+    }
+
+    private void term(){
+    	factor();
+    }
+
+    private void factor(){
+    	mustbe(TK.NUM);
     }
 
     // is current token what we want?
