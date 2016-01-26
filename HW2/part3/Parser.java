@@ -16,16 +16,16 @@ public class Parser {
     //myTable.myStack.push();
     
     private void scan() {
-	tok = scanner.scan();
+	   tok = scanner.scan();
     }
 
     private Scan scanner;
     Parser(Scan scanner) {
-	this.scanner = scanner;
-	scan();
-	program();
-	if( tok.kind != TK.EOF )
-	    parse_error("junk after logical end of program");
+    	this.scanner = scanner;
+    	scan();
+    	program();
+    	if( tok.kind != TK.EOF )
+    	    parse_error("junk after logical end of program");
     }
 
     private void program() {
@@ -98,6 +98,8 @@ public class Parser {
     		if(is(TK.NUM))
     			mustbe(TK.NUM);
     	}
+        if(notDeclared(tok.string))
+            declaration_error(tok.string,tok.lineNumber);
     	mustbe(TK.ID);
     }//COMPLETED
 
@@ -173,6 +175,19 @@ public class Parser {
 	    parse_error( "missing token (mustbe)" );
 	}
 	scan();
+    }
+
+    private boolean notDeclared(String string){
+        if(!scope.contains(string) && (myTable.myStack.search(string) == -1))
+            return true;
+        else{
+            return false;
+        }
+    }
+
+    private void declaration_error(String string, int lineNumber){
+        System.err.println(string + " is an undeclared variable on line " + lineNumber);
+        System.exit(1);
     }
 
     private void parse_error(String msg) {
