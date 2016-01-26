@@ -112,8 +112,8 @@ public class Parser {
     			mustbe(TK.NUM);
     	}
 
-        // if(notDeclared(tok.string))
-        //     declaration_error(tok.string,tok.lineNumber);
+        if(notDeclared(tok.string))
+            declaration_error(tok.string,tok.lineNumber);
     	mustbe(TK.ID);
     }
 
