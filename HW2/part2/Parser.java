@@ -57,6 +57,8 @@ public class Parser {
     		assignment();
     	else if(is(TK.PRINT))
     		print();
+    	else if(is(TK.IF))
+    		iff();
     }
 
     private void print(){
@@ -69,9 +71,33 @@ public class Parser {
     	expr();
     }
     private void ref_id(){
-
+    	if(is(TK.TILDE)){
+    		mustbe(TK.TILDE);
+    		mustbe(TK.NUM);
+    	}
     	mustbe(TK.ID);
     }
+
+    private void iff(){
+    	mustbe(TK.IF);
+    	guarded_command();
+    	if(is(TK.ELSEIF)){
+    		mustbe(TK.ELSEIF);
+    		guarded_command();
+    	}
+    	if(is(TK.ELSE)){
+    		mustbe(TK.ELSE);
+    		block();
+    	}
+    	mustbe(TK.ENDIF);
+    }
+
+    private void guarded_command(){
+    	expr();
+    	mustbe(TK.THEN);
+    	block();
+    } 
+
     private void expr(){
     	term();
     }
