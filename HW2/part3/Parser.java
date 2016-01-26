@@ -56,9 +56,14 @@ public class Parser {
 
     private void declaration() {
 		mustbe(TK.DECLARE);
+        if(is(TK.ID))
+            scope.add(tok.string);
 		mustbe(TK.ID);
+
 		while( is(TK.COMMA) ) {
 		    scan();
+            if(is(TK.ID))
+                scope.add(tok.string);
 		    mustbe(TK.ID);
 		}
     }//COMPLETED
